@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.dhcc.ecm.business.mybatis.capacity.mapper.StorageAreaMapper">
+	<resultMap id="BaseResultMap"
+		type="com.dhcc.ecm.business.mybatis.capacity.model.StorageArea">
+		<id column="PK_STORAGEAREA_ID" property="id" jdbcType="VARCHAR" />
+		<result column="STORAGEAREA_CODE" property="storageAreaCode"
+			jdbcType="VARCHAR" />
+		<result column="STORAGEAREA_NAME" property="storageAreaName"
+			jdbcType="VARCHAR" />
+		<result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="findStorageAreaPage"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageArea"
+		resultMap="BaseResultMap">
+		select t.PK_STORAGEAREA_ID id,
+		t.STORAGEAREA_CODE storageAreaCode,
+		t.STORAGEAREA_NAME as storageAreaName,
+		t.CREATETIME createTime
+		from T_DM_STORAGE_AREA t
+		<where>
+			<if test="null != id"> AND PK_STORAGEAREA_ID=#{id}  </if>
+			<if test="null != storageAreaName"> AND STORAGEAREA_NAME like
+				concat(concat('%',#{storageAreaName}),'%')  </if>
+		</where>
+		ORDER BY t.CREATETIME DESC
+	</select>
+	<!-- 校验库区名称是否存在 -->
+	<select id="checkStorageAreaNameisExist"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageArea"
+		resultType="string">
+		select count(t.PK_STORAGEAREA_ID) count
+		from T_DM_STORAGE_AREA t
+		WHERE ( STORAGEAREA_NAME=#{storageAreaName} or STORAGEAREA_CODE=#{storageAreaCode} )
+		<if test="null != id"> AND PK_STORAGEAREA_ID!=#{id}  </if>
+	</select>
+	<!-- 校验库区是否有库房 -->
+	<select id="checkStorageAreaHasRoom"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageArea"
+		resultType="string">
+		 select count(r.PK_STORAGEROOM_ID) as count 
+        from T_DM_STORAGE_ROOM r              
+		WHERE  STORAGEAREA_ID!=#{id}
+	</select>
+</mapper>

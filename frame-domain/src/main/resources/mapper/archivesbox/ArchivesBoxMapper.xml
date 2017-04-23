@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.dhcc.ecm.business.mybatis.archivesbox.mapper.ArchivesBoxMapper">
+	<resultMap id="BaseResultMap"
+		type="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		<id column="PK_ARCHIVESBOX_ID" property="id" jdbcType="VARCHAR" />
+		<result column="BOXNUM" property="boxNum" jdbcType="VARCHAR" />
+		<result column="STORAGEAREA_ID" property="storageAreaId"
+			jdbcType="VARCHAR" />
+		<result column="STORAGEROOM_ID" property="storageRoomId"
+			jdbcType="VARCHAR" />
+		<result column="CABINET_ID" property="cabinetId" jdbcType="VARCHAR" />
+		<result column="CABINETNODE" property="cabinetNode" jdbcType="DECIMAL" />
+		<result column="ARCHIVESBOXTHICK" property="archivesBoxThick"
+			jdbcType="DECIMAL" />
+		<result column="BENTFRAMECODE" property="bentFrameCode"
+			jdbcType="VARCHAR" />
+		<result column="ARCHIVESBOXNAME" property="archivesBoxName"
+			jdbcType="VARCHAR" />
+		<result column="ARCHIVESBOXTYPE" property="archivesBoxType"
+			jdbcType="VARCHAR" />
+		<result column="FITBOXTIME" property="fitBoxTime" jdbcType="TIMESTAMP" />
+		<result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="FITBOXUSER" property="fitBoxUser" jdbcType="VARCHAR" />
+		<result column="STORAGEYEAR" property="storageYear" jdbcType="VARCHAR" />
+		<result column="POLYMERIZE" property="polymerize" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 档案盒信息列表 -->
+	<select id="findArchivesBoxPage"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox"
+		resultMap="BaseResultMap">
+		select
+		a.PK_ARCHIVESBOX_ID id,
+		a.BOXNUM boxNum,
+		a.STORAGEAREA_ID as
+		storageAreaId,
+		a.STORAGEROOM_ID storageRoomId,
+		a.CABINET_ID cabinetId,
+		a.CABINETNODE
+		cabinetNode,
+		a.ARCHIVESBOXTHICK archivesBoxThick,
+		a.BENTFRAMECODE
+		bentFrameCode,
+		a.ARCHIVESBOXNAME archivesBoxName,
+		a.ARCHIVESBOXTYPE
+		archivesBoxType,
+		a.FITBOXTIME fitBoxTime,
+		a.CREATETIME
+		createTime,
+		a.FITBOXUSER
+		fitBoxUser,
+		a.STORAGEYEAR storageYear,
+		a.POLYMERIZE polymerize
+		from
+		T_DM_ARCHIVES_BOX a
+		<where>
+			<if test="beginTime!=null"> 
+		   <![CDATA[ and  to_char(a.CREATETIME,'yyyy-mm-dd') >= to_char(#{beginTime},'yyyy-mm-dd')  ]]>
+			</if>
+			<if test="endTime!=null "> 
+		<![CDATA[ and  to_char(a.CREATETIME,'yyyy-mm-dd') <=to_char(#{endTime},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="null != fitBoxUser"> AND a.FITBOXUSER=#{fitBoxUser}  </if>
+			<if test="null != archivesBoxType"> AND a.ARCHIVESBOXTYPE=#{archivesBoxType}  </if>
+			<if test="null != archivesBoxName"> AND a.ARCHIVESBOXNAME=#{archivesBoxName}  </if>
+			<if test="null != bentFrameCode"> AND a.BENTFRAMECODE=#{bentFrameCode}  </if>
+			<if test="null != boxNum"> AND a.BOXNUM=#{boxNum}  </if>
+		</where>
+		ORDER BY a.CREATETIME DESC
+	</select>
+	<!-- 删除档案盒信息 -->
+	<delete id="deleteArchivesBox"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		delete from T_DM_ARCHIVES_BOX where
+		PK_ARCHIVESBOX_ID=#{id}
+	</delete>
+	<!-- 删除档案盒中的档案 -->
+	<delete id="deleteArchives"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		delete from T_DM_FITBOX where ARCHIVESBOX_ID=#{id}
+		<if test="null != archivesIds">
+			and DOCUMENT_ID in
+			<foreach collection="archivesIds" item="item" index="index"
+				open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	</delete>
+	<!-- 移除档案盒的同时修改初始化信息中的当前档案盒宽度 -->
+	<update id="updateInitCabinetNodeAllBoxWide"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		UPDATE T_DM_INITCABINETNODE SET
+		ALLBOXWIDE=(ALLBOXWIDE-(SELECT ARCHIVESBOXTHICK FROM T_DM_ARCHIVES_BOX
+		WHERE PK_ARCHIVESBOX_ID=#{id}))
+		WHERE BENTFRAMECODE=(SELECT
+		BENTFRAMECODE FROM T_DM_ARCHIVES_BOX WHERE
+		PK_ARCHIVESBOX_ID=#{id})
+	</update>
+	<select id="isLastArchiveBox" resultType="string"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		select count(1) from t_dm_archives_box a left join
+		t_dm_archives_box b
+		on (a.pk_archivesBox_id=b.pk_archivesbox_id and
+		a.storagearea_id=b.storagearea_id and
+		a.storageroom_id=b.storageroom_id and a.cabinet_id=b.cabinet_id and
+		a.cabinetnode=b.cabinetnode )
+		where b.pk_archivesbox_id!=#{id}
+	</select>
+	<delete id="deleteInitByBox"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		delete from t_dm_initcabinetnode i
+		where i.storagearea_code=#{storageAreaId} and
+		i.storageroom_code=#{storageRoomId} and i.cabinet_code=#{cabinetId}
+		and i.cabinetnode=#{cabinetNode}
+	</delete>
+	<delete id="deleteOfenUsedBentByBox"
+		parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.ArchivesBox">
+		delete from t_dm_bentframe_oftenused o
+		where o.storagearea_code=#{storageAreaId} and
+		o.storageroom_code=#{storageRoomId} and o.cabinet_code=#{cabinetId}
+		and o.cabinetnode=#{cabinetNode}
+	</delete>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.dhcc.ecm.business.mybatis.capacity.mapper.CabinetInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.dhcc.ecm.business.mybatis.capacity.model.CabinetInfo">
+		<id column="PK_CABINET_ID" property="id" jdbcType="VARCHAR" />
+		<result column="STORAGEROOM_ID" property="storageRoomId"
+			jdbcType="VARCHAR" />
+		<result column="CABINET_CODE" property="cabinetCode" jdbcType="VARCHAR" />
+		<result column="CABINET_NAME" property="cabinetName" jdbcType="VARCHAR" />
+		<result column="CABINETROWS" property="cabinetRows" jdbcType="DECIMAL" />
+		<result column="CABINETCOLUMNS" property="cabinetColumns"
+			jdbcType="DECIMAL" />
+		<result column="CABINETNODELONG" property="cabinetNodeLong"
+			jdbcType="DECIMAL" />
+		<result column="CABINETNODEWIDE" property="cabinetNodeWide"
+			jdbcType="DECIMAL" />
+		<result column="CABINETNODENUM" property="cabinetNodeNum"
+			jdbcType="DECIMAL" />
+		<result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="findCabinetInfoPage"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.CabinetInfo"
+		resultMap="BaseResultMap">
+		select c.PK_CABINET_ID id,
+		c.STORAGEROOM_ID storageRoomId,
+		c.CABINET_CODE as cabinetCode,
+		c.CABINET_NAME cabinetName,
+		c.CABINETROWS cabinetRows,
+		c.CABINETCOLUMNS cabinetColumns,
+		c.CABINETNODELONG cabinetNodeLong,
+		c.CABINETNODEWIDE cabinetNodeWide,
+		c.CABINETNODENUM cabinetNodeNum,
+		c.CREATETIME createTime
+		from T_DM_CABINET_INFO c
+		<where>
+			<if test="null != storageRoomId"> AND c.STORAGEROOM_ID=#{storageRoomId}  </if>
+			<if test="null != cabinetCode"> AND c.CABINET_CODE=#{cabinetCode}  </if>
+			<if test="null != id"> AND c.PK_CABINET_ID=#{id}  </if>
+			<if test="null != cabinetName"> AND c.CABINET_NAME like
+				concat(concat('%',#{cabinetName}),'%')  </if>
+		</where>
+		ORDER BY c.CREATETIME DESC
+	</select>
+		<!-- 校验柜架名称是否存在 -->
+	<select id="checkCabinetNameisExist"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.CabinetInfo"
+		resultType="string">
+		select count(t.PK_CABINET_ID) count
+		from T_DM_CABINET_INFO t
+		WHERE STORAGEROOM_ID!=#{storageRoomId} and ( CABINET_NAME=#{cabinetName} or CABINET_CODE=#{cabinetCode} )
+		<if test="null != id"> AND t.PK_CABINET_ID!=#{id}  </if>
+	</select>
+	<select id="checkCabinetHasInit"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.CabinetInfo"
+		resultType="string">
+select count(1) from t_dm_initcabinetnode i
+left join (select storagearea_code,storageroom_code, cabinet_code from t_dm_cabinet_info left join t_dm_storage_room on pk_storageroom_id = storageroom_id 
+left join t_dm_storage_area on pk_storagearea_id=storagearea_id
+where pk_cabinet_id=#{id}) c
+on i.cabinet_code=c.cabinet_code and i.storagearea_code=c.storagearea_code and i.storageroom_code=c.storageroom_code
+	
+	
+	</select>
+</mapper>

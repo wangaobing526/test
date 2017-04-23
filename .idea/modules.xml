@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/archivesBox.iml" filepath="$PROJECT_DIR$/archivesBox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame-common/frame-common.iml" filepath="$PROJECT_DIR$/frame-common/frame-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame-control/frame-control.iml" filepath="$PROJECT_DIR$/frame-control/frame-control.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame-domain/frame-domain.iml" filepath="$PROJECT_DIR$/frame-domain/frame-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frame-service/frame-service.iml" filepath="$PROJECT_DIR$/frame-service/frame-service.iml" />
+    </modules>
+  </component>
+</project>

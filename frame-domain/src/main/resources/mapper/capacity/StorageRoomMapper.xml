@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dhcc.ecm.business.mybatis.capacity.mapper.StorageRoomMapper" >
+  <resultMap id="BaseResultMap" type="com.dhcc.ecm.business.mybatis.capacity.model.StorageRoom" >
+    <id column="PK_STORAGEROOM_ID" property="id" jdbcType="VARCHAR" />
+    <result column="STORAGEROOM_CODE" property="storageRoomCode" jdbcType="VARCHAR" />
+    <result column="STORAGEROOM_NAME" property="storageRoomName" jdbcType="VARCHAR" />
+    <result column="STORAGEAREA_ID" property="storageAreaId" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="findStorageRoomPage" parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageRoom" resultMap="BaseResultMap">
+        select r.PK_STORAGEROOM_ID id,
+        r.STORAGEROOM_CODE storageRoomCode,
+        r.STORAGEROOM_NAME as storageRoomName,
+        r.STORAGEAREA_ID as storageAreaId,
+        r.CREATETIME createTime
+        from T_DM_STORAGE_ROOM r              
+     <where>
+    <if test="null != storageAreaId"> AND  r.STORAGEAREA_ID=#{storageAreaId}  </if>
+    <if test="null != id"> AND  r.PK_STORAGEROOM_ID=#{id}  </if>
+	<if test="null != storageRoomName"> AND  STORAGEROOM_NAME like concat(concat('%',#{storageRoomName}),'%')  </if>
+	</where>
+	ORDER BY r.CREATETIME DESC
+  </select>
+  <!-- 校验库房名称是否存在 -->
+	<select id="checkStorageRoomNameisExist"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageRoom"
+		resultType="string">
+		select count(t.PK_STORAGEROOM_ID) count
+		from T_DM_STORAGE_ROOM t
+		WHERE STORAGEAREA_ID!=#{storageAreaId} AND ( STORAGEROOM_NAME=#{storageRoomName} or STORAGEROOM_CODE=#{storageRoomCode}  )
+		<if test="null != id"> AND PK_STORAGEROOM_ID!=#{id}  </if>
+	</select>
+	<!-- 校验库房是否有柜架 -->
+	<select id="checkStorageRoomHasCabinet"
+		parameterType="com.dhcc.ecm.business.mybatis.capacity.model.StorageRoom"
+		resultType="string">
+		 select count(r.PK_CABINET_ID) as count 
+        from T_DM_CABINET_INFO r              
+		WHERE  STORAGEROOM_ID!=#{id}
+	</select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dhcc.ecm.business.mybatis.archivesbox.mapper.BentframeOftenusedMapper" >
+  <resultMap id="BaseResultMap" type="com.dhcc.ecm.business.mybatis.archivesbox.model.BentFrameOftenUsed" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="OFTENUSED_ID" property="id" jdbcType="VARCHAR" />
+    <result column="BENTFRAMECODE" property="bentFrameCode" jdbcType="VARCHAR" />
+    <result column="STORAGEAREA_CODE" property="storageAreaCode" jdbcType="VARCHAR" />
+    <result column="STORAGEROOM_CODE" property="storageRoomCode" jdbcType="VARCHAR" />
+    <result column="CABINET_CODE" property="cabinetCode" jdbcType="VARCHAR" />
+    <result column="CABINETNODE" property="cabinetNode" jdbcType="DECIMAL" />
+    <result column="ARCHIVESBOXWIDE" property="archivesBoxWide" jdbcType="DECIMAL" />
+    <result column="BELONGUSER" property="belongUser" jdbcType="VARCHAR" />
+     <result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
+     <select id="getBentFrameOftenUsedList" parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.BentFrameOftenUsedVO" resultMap="BaseResultMap">
+        select <include refid="dynamic_columns"/>
+        from T_DM_BENTFRAME_OFTENUSED t               
+      <include refid="dynamic_conditions"/>
+  	</select>
+  	
+  	   <sql id="dynamic_columns" >
+        t.OFTENUSED_ID id,
+        t.BENTFRAMECODE bentFrameCode,
+        t.STORAGEAREA_CODE storageAreaCode,
+        t.STORAGEROOM_CODE storageRoomCode,
+        t.CABINET_CODE cabinetCode,
+        t.CABINETNODE cabinetNode,
+        t.ARCHIVESBOXWIDE archivesBoxWide,
+        t.BELONGUSER belongUser,
+        t.CREATETIME createTime
+	</sql>
+	
+	<sql id="dynamic_conditions" >
+		<where>
+			<if test="null != id"> AND  t.id = #{id} </if>
+			<!-- 不能再增加其他条件 -->
+			<if test="null != belongUser"> AND  t.BELONGUSER =  #{belongUser} </if>
+			<if test="null != storageAreaCode"> AND  t.STORAGEAREA_CODE =  #{storageAreaCode} </if>
+			<if test="null != storageRoomCode"> AND  t.STORAGEROOM_CODE =  #{storageRoomCode} </if>
+			<if test="null != cabinetCode"> AND  t.CABINET_CODE =  #{cabinetCode} </if>
+			order by t.createTime desc
+		</where>
+	</sql>
+</mapper>

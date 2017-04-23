@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dhcc.ecm.business.mybatis.archivesbox.mapper.InitCabinetNodeMapper" > 
+  <resultMap id="BaseResultMap" type="com.dhcc.ecm.business.mybatis.archivesbox.model.InitCabinetNode" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="PK_INITCABINETNODE_ID" property="id" jdbcType="VARCHAR" />
+    <result column="STORAGEAREA_CODE" property="storageAreaCode" jdbcType="VARCHAR" />
+    <result column="STORAGEROOM_CODE" property="storageRoomCode" jdbcType="VARCHAR" />
+    <result column="CABINET_CODE" property="cabinetCode" jdbcType="VARCHAR" />
+    <result column="CABINETNODE" property="cabinetNode" jdbcType="DECIMAL" />
+    <result column="CABINETNODEWIDE" property="cabinetNodeWide" jdbcType="DECIMAL" />
+    <result column="BENTFRAMECODE" property="bentFrameCode" jdbcType="VARCHAR" />
+    <result column="ARCHIVESBOXWIDE" property="archivesBoxWide" jdbcType="DECIMAL" />
+    <result column="ARCHIVESBOXNUM" property="archivesBoxNum" jdbcType="VARCHAR" />
+    <result column="ALLBOXWIDE" property="allBoxWide" jdbcType="DECIMAL" />
+  </resultMap>
+  
+     <select id="getinitCabinetNodeList" parameterType="com.dhcc.ecm.business.mybatis.archivesbox.model.InitCabinetNodeVO" resultMap="BaseResultMap">
+        select <include refid="dynamic_columns"/>
+        from T_DM_INITCABINETNODE t               
+      <include refid="dynamic_conditions"/>
+  	</select>
+  	
+  	   <sql id="dynamic_columns" >
+        t.PK_INITCABINETNODE_ID id,
+        t.STORAGEAREA_CODE storageAreaCode,
+        t.STORAGEROOM_CODE storageRoomCode,
+        t.CABINET_CODE cabinetCode,
+        t.CABINETNODE cabinetNode,
+        t.CABINETNODEWIDE cabinetNodeWide,
+        t.BENTFRAMECODE bentFrameCode,
+        t.ARCHIVESBOXWIDE archivesBoxWide,
+        t.ARCHIVESBOXNUM archivesBoxNum,
+        t.ALLBOXWIDE allBoxWide
+	</sql>
+	
+	<sql id="dynamic_conditions" >
+		<where>
+			<if test="null != id"> AND  t.id = #{id} </if>
+			<!-- <if test="null != bentFrameCodeConditon"> AND  t.bentFrameCode LIKE  #{bentFrameCodeConditon} </if> -->
+			<if test="null != storageAreaCode"> AND  t.STORAGEAREA_CODE =  #{storageAreaCode} </if>
+			<if test="null != storageRoomCode"> AND  t.STORAGEROOM_CODE =  #{storageRoomCode} </if>
+			<if test="null != cabinetCode"> AND  t.CABINET_CODE =  #{cabinetCode} </if>
+			<if test="null != cabinetNode"> AND  t.CABINETNODE =  #{cabinetNode} </if>
+		</where>
+	</sql>
+</mapper>

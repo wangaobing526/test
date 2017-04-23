@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dhcc.ecm.business.mybatis.archivesbox.mapper.FitBoxMapper" >
+  <resultMap id="BaseResultMap" type="com.dhcc.ecm.business.mybatis.archivesbox.model.FitBox" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="PK_FITBOX_ID" property="id" jdbcType="VARCHAR" />
+    <result column="ARCHIVESBOX_ID" property="archivesBoxId" jdbcType="VARCHAR" />
+    <result column="DOCUMENT_ID" property="documentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getDocumentByArchivesBox" parameterType="string" resultType="string">
+        select f.DOCUMENT_ID
+        from T_DM_FITBOX f               
+        where f.ARCHIVESBOX_ID=#{id}
+  	</select>
+</mapper>
