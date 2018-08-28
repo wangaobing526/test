@@ -12,6 +12,7 @@ import org.springframework.beans.FatalBeanException;
  * @author wangaobing wangaobing@dhcc.com.cn
  * @date 2017-04-20
  * 增加一行内容
+ * 增加第二行内容
  */
 public abstract class BusBeanUtils extends org.springframework.beans.BeanUtils {
 
