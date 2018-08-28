@@ -9,7 +9,7 @@ import org.springframework.beans.FatalBeanException;
 /**
  * @ClassName BusBeanUtils
  * @Description 重构属性设置接口，空值及数字的零不设置
- * @author wangaobing wangaobing001@dhcc.com.cn
+ * @author wangaobing wangaobing@dhcc.com.cn
  * @date 2017-04-20
  */
 public abstract class BusBeanUtils extends org.springframework.beans.BeanUtils {
