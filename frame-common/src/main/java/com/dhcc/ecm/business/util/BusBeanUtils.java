@@ -11,6 +11,7 @@ import org.springframework.beans.FatalBeanException;
  * @Description 重构属性设置接口，空值及数字的零不设置
  * @author wangaobing wangaobing001@dhcc.com.cn
  * @date 2017-04-20
+ * 增加一行内容
  */
 public abstract class BusBeanUtils extends org.springframework.beans.BeanUtils {
 
