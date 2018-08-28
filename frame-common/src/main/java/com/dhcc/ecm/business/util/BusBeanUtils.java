@@ -14,7 +14,6 @@ import org.springframework.beans.FatalBeanException;
  * 增加一行内容
  */
 public abstract class BusBeanUtils extends org.springframework.beans.BeanUtils {
-haha
 	public static void copyProperties(Object source, Object target) throws BeansException {
 		Class<?> actualEditable = target.getClass();
 		PropertyDescriptor[] targetPds = getPropertyDescriptors(actualEditable);
