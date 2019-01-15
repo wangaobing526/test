@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.ibm.ecm.cnnp:common:2.4.17">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../repository/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../repository/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../repository/com/ibm/ecm/cnnp/common/2.4.17/common-2.4.17-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
