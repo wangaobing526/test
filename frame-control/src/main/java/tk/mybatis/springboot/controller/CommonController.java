@@ -40,7 +40,7 @@ import tk.mybatis.springboot.model.BaseEntity;
 
 /**
  * @author liuzh
- * @since 2015-12-19 11:10
+ * @since 2015-12-19 11:1012
  */
 @RestController
 @RequestMapping("/common")
